@@ -4,7 +4,7 @@ import { CVData, TemplateId } from './types';
 import { CVEditor } from './components/CVEditor';
 import { ModernTemplate, ClassicTemplate, MinimalistTemplate } from './components/CVTemplates';
 import { AIHelper } from './components/AIHelper';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui-lib/button';
 import { 
   Download, 
   Settings, 
@@ -29,13 +29,13 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+} from "@/components/ui-lib/dialog";
+import { Card } from '@/components/ui-lib/card';
+import { Input } from '@/components/ui-lib/input';
+import { Label } from '@/components/ui-lib/label';
+import { Textarea } from '@/components/ui-lib/textarea';
+import { ScrollArea } from '@/components/ui-lib/scroll-area';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui-lib/select';
 
 import { exportToDocx } from './lib/docxExport';
 import { handleFileImport } from './lib/importHandlers';

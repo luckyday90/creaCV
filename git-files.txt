@@ -1,0 +1,2 @@
+Command failed: git ls-files
+fatal: not a git repository (or any of the parent directories): .git

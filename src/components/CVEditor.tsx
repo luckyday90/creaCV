@@ -1,13 +1,13 @@
 import React from 'react';
 import { CVData } from '../types';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui-lib/input';
+import { Textarea } from '@/components/ui-lib/textarea';
+import { Label } from '@/components/ui-lib/label';
+import { Button } from '@/components/ui-lib/button';
 import { Plus, Trash2, ChevronRight, ChevronDown } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Card, CardContent } from '@/components/ui-lib/card';
+import { ScrollArea } from '@/components/ui-lib/scroll-area';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui-lib/tabs';
 
 interface CVEditorProps {
   data: CVData;
