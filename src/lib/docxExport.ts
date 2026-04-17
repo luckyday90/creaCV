@@ -29,20 +29,20 @@ export const exportToDocx = async (data: CVData) => {
           new Paragraph({
             text: 'Riepilogo Professionale',
             heading: HeadingLevel.HEADING_2,
-            border: { bottom: { color: 'auto', space: 1, value: 'single', size: 6 } },
+            border: { bottom: { color: 'auto', space: 1, style: 'single', size: 6 } },
           }),
           new Paragraph({ text: data.personalInfo.summary, spacing: { before: 100, after: 200 } }),
 
           new Paragraph({
             text: 'Esperienza Lavorativa',
             heading: HeadingLevel.HEADING_2,
-            border: { bottom: { color: 'auto', space: 1, value: 'single', size: 6 } },
+            border: { bottom: { color: 'auto', space: 1, style: 'single', size: 6 } },
           }),
           ...data.experiences.flatMap((exp) => [
             new Paragraph({
               children: [
                 new TextRun({ text: exp.position, bold: true }),
-                new TextRun({ text: ` | ${exp.company}`, italic: true }),
+                new TextRun({ text: ` | ${exp.company}`, italics: true }),
               ],
               spacing: { before: 150 },
             }),
@@ -56,13 +56,13 @@ export const exportToDocx = async (data: CVData) => {
           new Paragraph({
             text: 'Istruzione e Formazione',
             heading: HeadingLevel.HEADING_2,
-            border: { bottom: { color: 'auto', space: 1, value: 'single', size: 6 } },
+            border: { bottom: { color: 'auto', space: 1, style: 'single', size: 6 } },
           }),
           ...data.educations.flatMap((edu) => [
             new Paragraph({
               children: [
                 new TextRun({ text: edu.degree, bold: true }),
-                new TextRun({ text: ` | ${edu.school}`, italic: true }),
+                new TextRun({ text: ` | ${edu.school}`, italics: true }),
               ],
               spacing: { before: 150 },
             }),
@@ -76,7 +76,7 @@ export const exportToDocx = async (data: CVData) => {
           new Paragraph({
             text: 'Competenze',
             heading: HeadingLevel.HEADING_2,
-            border: { bottom: { color: 'auto', space: 1, value: 'single', size: 6 } },
+            border: { bottom: { color: 'auto', space: 1, style: 'single', size: 6 } },
           }),
           new Paragraph({
             text: data.skills.join(', '),
@@ -87,13 +87,13 @@ export const exportToDocx = async (data: CVData) => {
             new Paragraph({
               text: 'Certificazioni',
               heading: HeadingLevel.HEADING_2,
-              border: { bottom: { color: 'auto', space: 1, value: 'single', size: 6 } },
+              border: { bottom: { color: 'auto', space: 1, style: 'single', size: 6 } },
             }),
             ...data.certifications.flatMap((cert) => [
               new Paragraph({
                 children: [
                   new TextRun({ text: cert.name, bold: true }),
-                  new TextRun({ text: ` - ${cert.issuer}`, italic: true }),
+                  new TextRun({ text: ` - ${cert.issuer}`, italics: true }),
                   new TextRun({ text: ` (${cert.date})` }),
                 ],
                 spacing: { before: 100, after: 100 },
@@ -105,7 +105,7 @@ export const exportToDocx = async (data: CVData) => {
             new Paragraph({
               text: 'Lingue',
               heading: HeadingLevel.HEADING_2,
-              border: { bottom: { color: 'auto', space: 1, value: 'single', size: 6 } },
+              border: { bottom: { color: 'auto', space: 1, style: 'single', size: 6 } },
             }),
             new Paragraph({
               text: data.languages.map(l => `${l.name} (${l.level})`).join(', '),

@@ -27,10 +27,50 @@ export interface Education {
   description: string;
 }
 
+export interface Publication {
+  id: string;
+  title: string;
+  publisher: string;
+  date: string;
+  isbn: string;
+  url: string;
+  description: string;
+}
+
+export interface CustomSectionItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  date: string;
+  description: string;
+}
+
+export interface CustomSection {
+  id: string;
+  title: string;
+  items: CustomSectionItem[];
+}
+
+export interface BottomImage {
+  url: string;
+}
+
+export interface DocumentFile {
+  id: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  cvData: CVData;
+  template: TemplateId;
+  bottomImage?: BottomImage;
+}
+
 export interface CVData {
   personalInfo: PersonalInfo;
   experiences: Experience[];
   educations: Education[];
+  publications: Publication[];
+  customSections: CustomSection[];
   skills: string[];
   projects: { id: string; name: string; description: string; link: string }[];
   languages: { name: string; level: string }[];
@@ -38,4 +78,4 @@ export interface CVData {
   interests: string[];
 }
 
-export type TemplateId = 'modern' | 'classic' | 'minimalist' | 'creative';
+export type TemplateId = 'modern' | 'classic' | 'minimalist' | 'creative' | 'zenone';

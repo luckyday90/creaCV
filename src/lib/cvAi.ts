@@ -48,10 +48,19 @@ export const CVAIProvider = {
     return JSON.parse(response.text || "{}");
   },
 
-  async parseCVFromText(rawText: string) {
+  async parseCVFromText(rawText: string, currentData?: any) {
+    const mergeContext = currentData 
+      ? `\n\nATTENZIONE: Di seguito l'oggetto JSON del Curriculum ATTUALE dell'utente. Il tuo compito è UNIRE le nuove informazioni estratte dal testo sovrastante a questo JSON. 
+      REGOLE DI UNIONE MENTALE: 
+      1. Se le esperienze lavorative, l'educazione o i progetti nel testo sono NUOVI rispetto al JSON, AGGIUNGILI agli array. 
+      2. Se sembrano gli STESSI ma con più o meno dettagli, AGGIORNA l'item esistente fondendo i dati. 
+      3. NON cancellare dati esistenti nel JSON a meno che non sia logicamente corretto farlo (es. dati placeholder base). Usa identificatori \`id\` casuali per i nuovi elementi.
+      \nCurriculum Attuale (JSON):\n${JSON.stringify(currentData)}`
+      : '';
+
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: `Estrai le informazioni da questo curriculum e trasformale in un oggetto JSON strutturato secondo lo schema fornito. Se un campo non è presente, usa una stringa vuota o un array vuoto. Traduci i contenuti in italiano se sono in un'altra lingua.\n\nContenuto del curriculum:\n${rawText}`,
+      contents: `Estrai le informazioni da questo curriculum testo e produci un JSON strutturato. Se un campo non è presente e non c'è un dato corrente da salvare, usa stringhe o array vuoti. \n\nTESTO CURRICULUM:\n${rawText}${mergeContext}`,
       config: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -100,6 +109,49 @@ export const CVAIProvider = {
                 required: ["id", "school", "degree", "startDate", "endDate", "description"]
               }
             },
+            publications: {
+              type: Type.ARRAY,
+              description: "Pubblicazioni accademiche, libri, articoli, paper o brevetti.",
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  id: { type: Type.STRING },
+                  title: { type: Type.STRING },
+                  publisher: { type: Type.STRING },
+                  date: { type: Type.STRING },
+                  isbn: { type: Type.STRING, description: "Codice ISBN, ISSN, DOI o altra referenza univoca." },
+                  url: { type: Type.STRING },
+                  description: { type: Type.STRING }
+                },
+                required: ["id", "title", "publisher", "date", "isbn", "url", "description"]
+              }
+            },
+            customSections: {
+              type: Type.ARRAY,
+              description: "Sezioni aggiuntive come Premi, Volontariato, Servizio di Leva, etc.",
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  id: { type: Type.STRING },
+                  title: { type: Type.STRING },
+                  items: {
+                    type: Type.ARRAY,
+                    items: {
+                      type: Type.OBJECT,
+                      properties: {
+                        id: { type: Type.STRING },
+                        title: { type: Type.STRING },
+                        subtitle: { type: Type.STRING },
+                        date: { type: Type.STRING },
+                        description: { type: Type.STRING }
+                      },
+                      required: ["id", "title", "subtitle", "date", "description"]
+                    }
+                  }
+                },
+                required: ["id", "title", "items"]
+              }
+            },
             skills: { type: Type.ARRAY, items: { type: Type.STRING } },
             projects: {
               type: Type.ARRAY,
@@ -140,7 +192,7 @@ export const CVAIProvider = {
             },
             interests: { type: Type.ARRAY, items: { type: Type.STRING } }
           },
-          required: ["personalInfo", "experiences", "educations", "skills", "projects", "languages", "certifications", "interests"]
+          required: ["personalInfo", "experiences", "educations", "publications", "customSections", "skills", "projects", "languages", "certifications", "interests"]
         }
       }
     });

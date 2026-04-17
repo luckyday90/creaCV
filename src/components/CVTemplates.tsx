@@ -1,12 +1,13 @@
 import React from 'react';
-import { CVData } from '../types';
+import { CVData, BottomImage } from '../types';
 import { Mail, Phone, MapPin, Globe, ExternalLink } from 'lucide-react';
 
 interface TemplateProps {
   data: CVData;
+  bottomImage?: BottomImage;
 }
 
-export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
+export const ModernTemplate: React.FC<TemplateProps> = ({ data, bottomImage }) => {
   return (
     <div id="cv-preview" className="bg-white text-slate-800 p-8 min-h-[1120px] font-sans w-[800px]">
       <div className="flex justify-between items-start border-b-2 border-primary pb-6 mb-8">
@@ -60,6 +61,46 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
               ))}
             </div>
           </section>
+
+          {data.publications && data.publications.length > 0 && (
+            <section>
+              <h2 className="text-lg font-bold border-b border-slate-200 mb-4 pb-1 uppercase tracking-wide">Pubblicazioni</h2>
+              <div className="space-y-4">
+                {data.publications.map((pub) => (
+                  <div key={pub.id}>
+                    <div className="flex justify-between items-baseline">
+                      <h3 className="font-bold text-slate-900">{pub.title}</h3>
+                      <span className="text-sm text-slate-500 italic font-medium">{pub.date}</span>
+                    </div>
+                    <p className="text-slate-600 text-sm font-semibold">
+                      {pub.publisher} 
+                      {pub.isbn && <span className="text-slate-400 font-normal ml-1">| ISBN/DOI: {pub.isbn}</span>}
+                    </p>
+                    {pub.description && <p className="text-slate-700 text-sm mt-1 whitespace-pre-wrap">{pub.description}</p>}
+                    {pub.url && <a href={pub.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary/80 hover:text-primary mt-1 inline-block break-all">{pub.url}</a>}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {data.customSections && data.customSections.map(section => (
+            <section key={section.id}>
+              <h2 className="text-lg font-bold border-b border-slate-200 mb-4 pb-1 uppercase tracking-wide">{section.title}</h2>
+              <div className="space-y-4">
+                {section.items.map((item) => (
+                  <div key={item.id}>
+                    <div className="flex justify-between items-baseline">
+                      <h3 className="font-bold text-slate-900">{item.title}</h3>
+                      {item.date && <span className="text-sm text-slate-500 italic font-medium">{item.date}</span>}
+                    </div>
+                    {item.subtitle && <p className="text-slate-600 text-sm font-semibold">{item.subtitle}</p>}
+                    {item.description && <p className="text-slate-700 text-sm mt-1 whitespace-pre-wrap">{item.description}</p>}
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
 
           {data.certifications && data.certifications.length > 0 && (
             <section>
@@ -129,11 +170,21 @@ export const ModernTemplate: React.FC<TemplateProps> = ({ data }) => {
           )}
         </div>
       </div>
+      
+      <div className="mt-16 text-center text-[10px] text-slate-400 font-medium z-10 relative">
+        Curriculum generato con <a href="https://www.zenone.it" target="_blank" rel="noopener noreferrer" className="hover:text-primary">WWW.ZENONE.IT</a>
+      </div>
+
+      {bottomImage && (
+        <div className="absolute bottom-8 right-8 w-[220px]">
+           <img src={bottomImage.url} alt="Firma o Immagine" className="w-full object-contain mix-blend-multiply" style={{ maxHeight: '120px' }} referrerPolicy="no-referrer" />
+        </div>
+      )}
     </div>
   );
 };
 
-export const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
+export const ClassicTemplate: React.FC<TemplateProps> = ({ data, bottomImage }) => {
   return (
     <div id="cv-preview" className="bg-white text-black p-12 min-h-[1120px] font-serif leading-normal uppercase-headers">
       <div className="text-center mb-8">
@@ -197,6 +248,43 @@ export const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
           </section>
         )}
 
+        {data.publications && data.publications.length > 0 && (
+          <section>
+            <h2 className="text-sm font-bold border-b-2 border-black mb-3 pb-0.5 uppercase tracking-widest">Pubblicazioni</h2>
+            <div className="space-y-3">
+              {data.publications.map((pub) => (
+                <div key={pub.id} className="text-xs">
+                  <div className="flex justify-between font-bold text-sm">
+                    <span>{pub.title}</span>
+                    <span>{pub.date}</span>
+                  </div>
+                  <div className="italic">{pub.publisher} {pub.isbn && <span className="font-normal text-gray-500">- ISBN/DOI: {pub.isbn}</span>}</div>
+                  {pub.description && <p className="text-justify leading-relaxed whitespace-pre-wrap mt-1">{pub.description}</p>}
+                  {pub.url && <div className="text-gray-500 mt-0.5 overflow-hidden text-ellipsis whitespace-nowrap">{pub.url}</div>}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {data.customSections && data.customSections.map(section => (
+          <section key={section.id}>
+            <h2 className="text-sm font-bold border-b-2 border-black mb-3 pb-0.5 uppercase tracking-widest">{section.title}</h2>
+            <div className="space-y-4">
+              {section.items.map((item) => (
+                <div key={item.id}>
+                  <div className="flex justify-between font-bold text-sm">
+                    <span>{item.title}</span>
+                    {item.date && <span>{item.date}</span>}
+                  </div>
+                  {item.subtitle && <div className="italic text-sm">{item.subtitle}</div>}
+                  {item.description && <p className="text-xs text-justify leading-relaxed whitespace-pre-wrap">{item.description}</p>}
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+
         <section className="grid grid-cols-2 gap-8">
           <div>
             <h2 className="text-sm font-bold border-b-2 border-black mb-3 pb-0.5 uppercase tracking-widest">Competenze</h2>
@@ -222,11 +310,21 @@ export const ClassicTemplate: React.FC<TemplateProps> = ({ data }) => {
           </section>
         )}
       </div>
+
+      <div className="mt-16 text-center text-[10px] text-gray-400 font-sans tracking-wide z-10 relative">
+        Curriculum generato con <a href="https://www.zenone.it" target="_blank" rel="noopener noreferrer" className="hover:text-black hover:underline">WWW.ZENONE.IT</a>
+      </div>
+
+      {bottomImage && (
+        <div className="absolute bottom-8 right-8 w-[220px]">
+           <img src={bottomImage.url} alt="Firma o Immagine" className="w-full object-contain mix-blend-multiply" style={{ maxHeight: '120px' }} referrerPolicy="no-referrer" />
+        </div>
+      )}
     </div>
   );
 };
 
-export const MinimalistTemplate: React.FC<TemplateProps> = ({ data }) => {
+export const MinimalistTemplate: React.FC<TemplateProps> = ({ data, bottomImage }) => {
   return (
     <div id="cv-preview" className="bg-white text-zinc-900 p-10 min-h-[1120px] font-sans">
       <header className="mb-10">
@@ -319,7 +417,169 @@ export const MinimalistTemplate: React.FC<TemplateProps> = ({ data }) => {
             </div>
           </section>
         )}
+
+        {data.publications && data.publications.length > 0 && (
+          <section className="flex gap-10 border-t border-zinc-100 pt-10">
+            <div className="w-32 flex-shrink-0 font-mono text-[10px] uppercase tracking-widest text-zinc-400">Publications</div>
+            <div className="flex-1 space-y-6">
+              {data.publications.map(pub => (
+                <div key={pub.id}>
+                  <div className="flex justify-between items-baseline mb-1">
+                    <h3 className="font-bold text-sm">{pub.title}</h3>
+                    <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-tighter">{pub.date}</span>
+                  </div>
+                  <div className="text-xs text-zinc-500 mb-1 font-medium">{pub.publisher} {pub.isbn && `— ISBN/DOI: ${pub.isbn}`}</div>
+                  {pub.description && <p className="text-xs text-zinc-600 leading-normal mb-1 whitespace-pre-wrap">{pub.description}</p>}
+                  {pub.url && <a href={pub.url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-zinc-400 hover:text-zinc-900 break-all block">{pub.url}</a>}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {data.customSections && data.customSections.map((section) => (
+          <section key={section.id} className="flex gap-10 border-t border-zinc-100 pt-10">
+            <div className="w-32 flex-shrink-0 font-mono text-[10px] uppercase tracking-widest text-zinc-400">{section.title}</div>
+            <div className="flex-1 space-y-6">
+              {section.items.map(item => (
+                <div key={item.id}>
+                  <div className="flex justify-between items-baseline mb-1">
+                    <h3 className="font-bold text-sm">{item.title}</h3>
+                    {item.date &&  <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-tighter">{item.date}</span>}
+                  </div>
+                  {item.subtitle && <div className="text-xs text-zinc-500 mb-1 font-medium">{item.subtitle}</div>}
+                  {item.description && <p className="text-xs text-zinc-600 leading-normal whitespace-pre-wrap">{item.description}</p>}
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+
       </div>
+
+      <div className="mt-20 text-center text-[9px] font-mono uppercase tracking-widest text-zinc-300 z-10 relative">
+        Created via <a href="https://www.zenone.it" target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-600">WWW.ZENONE.IT</a>
+      </div>
+
+      {bottomImage && (
+        <div className="absolute bottom-8 right-8 w-[220px]">
+           <img src={bottomImage.url} alt="Firma o Immagine" className="w-full object-contain mix-blend-multiply" style={{ maxHeight: '120px' }} referrerPolicy="no-referrer" />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const ZenoneTemplate: React.FC<TemplateProps> = ({ data, bottomImage }) => {
+  return (
+    <div id="cv-preview" className="bg-white text-[#333] min-h-[1120px] font-sans flex w-[800px] relative pb-24">
+      {/* Sidebar */}
+      <div className="w-[30%] bg-[#edf3f0] p-8 shrink-0 flex flex-col pt-12">
+        <h2 className="text-[#2b5945] font-bold text-[13px] uppercase tracking-wider mb-6 leading-tight">Software<br/>conosciuti</h2>
+        <div className="space-y-2 mb-12">
+          {data.skills.map((skill, i) => (
+            <div key={i} className="flex justify-between items-center text-[10px]">
+              <span className="font-medium text-slate-800 truncate pr-2">{skill}</span>
+              <div className="flex gap-0.5 shrink-0">
+                {[1, 2, 3, 4, 5].map(dot => (
+                   <div key={dot} className={`w-1.5 h-1.5 rounded-full ${dot <= 4 ? 'bg-[#2b5945]' : 'bg-[#c5d3cd]'}`} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <h2 className="text-[#2b5945] font-bold text-[13px] uppercase tracking-wider mb-6 leading-tight">Lingue</h2>
+        <div className="space-y-2 mb-12">
+          {data.languages.map((lang, i) => (
+            <div key={i} className="flex justify-between items-center text-[10px]">
+              <span className="font-medium text-slate-800 truncate pr-2">{lang.name}</span>
+              <div className="flex gap-0.5 shrink-0">
+                {[1, 2, 3, 4, 5].map(dot => (
+                   <div key={dot} className={`w-1.5 h-1.5 rounded-full ${dot <= (lang.level === 'Madrelingua' ? 5 : 3) ? 'bg-[#2b5945]' : 'bg-[#c5d3cd]'}`} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 p-10 pt-12">
+        <h1 className="text-3xl font-extrabold text-[#2b5945] mb-2 uppercase tracking-wide">{data.personalInfo.fullName}</h1>
+        {data.personalInfo.jobTitle && <p className="text-[#2b5945] font-semibold text-sm mb-6">{data.personalInfo.jobTitle}</p>}
+        {data.personalInfo.summary && (
+           <p className="text-sm font-medium text-slate-700 leading-relaxed mb-8">{data.personalInfo.summary}</p>
+        )}
+
+        <div className="space-y-8">
+          <section>
+            <h2 className="text-[#2b5945] font-bold text-[13px] uppercase tracking-wider mb-4 border-b border-[#edf3f0] pb-1">Esperienze Professionali</h2>
+            <div className="space-y-6">
+              {data.experiences.map((exp) => (
+                <div key={exp.id}>
+                  <h3 className="font-bold text-[13px] text-slate-900 mb-1">{exp.position}</h3>
+                  <div className="text-[10px] text-slate-400 mb-2 font-medium">{exp.startDate} - {exp.endDate}</div>
+                  <div className="text-[12px] font-semibold text-slate-700 mb-2">{exp.company}</div>
+                  <p className="text-[11px] text-slate-600 leading-relaxed whitespace-pre-wrap">{exp.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section>
+             <h2 className="text-[#2b5945] font-bold text-[13px] uppercase tracking-wider mb-4 border-b border-[#edf3f0] pb-1">Istruzione</h2>
+             <div className="space-y-6">
+                {data.educations.map((edu) => (
+                  <div key={edu.id}>
+                    <h3 className="font-bold text-[13px] text-slate-900 mb-1">{edu.degree}</h3>
+                    <div className="text-[10px] text-slate-400 mb-2 font-medium">{edu.startDate} - {edu.endDate}</div>
+                    <div className="text-[12px] font-semibold text-slate-700 mb-2">{edu.school}</div>
+                    <p className="text-[11px] text-slate-600 leading-relaxed whitespace-pre-wrap">{edu.description}</p>
+                  </div>
+                ))}
+             </div>
+          </section>
+
+          {data.publications && data.publications.length > 0 && (
+             <section>
+               <h2 className="text-[#2b5945] font-bold text-[13px] uppercase tracking-wider mb-4 border-b border-[#edf3f0] pb-1">Pubblicazioni</h2>
+               <div className="space-y-6">
+                  {data.publications.map((pub) => (
+                    <div key={pub.id}>
+                      <h3 className="font-bold text-[13px] text-slate-900 mb-1">{pub.title}</h3>
+                      <div className="text-[10px] text-slate-400 mb-1 font-medium">{pub.date}</div>
+                      <div className="text-[11px] text-slate-700 mb-1">{pub.publisher} {pub.isbn && `- ISBN: ${pub.isbn}`}</div>
+                      <p className="text-[11px] text-slate-600 leading-relaxed whitespace-pre-wrap">{pub.description}</p>
+                    </div>
+                  ))}
+               </div>
+             </section>
+          )}
+
+          {data.customSections && data.customSections.map(section => (
+            <section key={section.id}>
+               <h2 className="text-[#2b5945] font-bold text-[13px] uppercase tracking-wider mb-4 border-b border-[#edf3f0] pb-1">{section.title}</h2>
+               <div className="space-y-6">
+                  {section.items.map((item) => (
+                    <div key={item.id}>
+                      <h3 className="font-bold text-[13px] text-slate-900 mb-1">{item.title}</h3>
+                      {item.date && <div className="text-[10px] text-slate-400 mb-2 font-medium">{item.date}</div>}
+                      {item.subtitle && <div className="text-[12px] font-semibold text-slate-700 mb-2">{item.subtitle}</div>}
+                      <p className="text-[11px] text-slate-600 leading-relaxed whitespace-pre-wrap">{item.description}</p>
+                    </div>
+                  ))}
+               </div>
+            </section>
+          ))}
+        </div>
+      </div>
+
+      {bottomImage && (
+        <div className="absolute bottom-8 left-8 w-[220px]">
+           <img src={bottomImage.url} alt="Immagine di fondo" className="w-full object-contain mix-blend-multiply" style={{ maxHeight: '120px' }} referrerPolicy="no-referrer" />
+        </div>
+      )}
     </div>
   );
 };

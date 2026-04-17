@@ -63,6 +63,13 @@ export const CVEditor: React.FC<CVEditorProps> = ({ data, onChange }) => {
     });
   };
 
+  const removeEducation = (id: string) => {
+    onChange({
+      ...data,
+      educations: data.educations.filter(edu => edu.id !== id)
+    });
+  };
+
   const addCertification = () => {
     onChange({
       ...data,
@@ -84,6 +91,99 @@ export const CVEditor: React.FC<CVEditorProps> = ({ data, onChange }) => {
     onChange({
       ...data,
       certifications: data.certifications.filter(cert => cert.id !== id)
+    });
+  };
+
+  const addPublication = () => {
+    onChange({
+      ...data,
+      publications: [
+        ...(data.publications || []),
+        { id: Math.random().toString(), title: '', publisher: '', date: '', isbn: '', url: '', description: '' }
+      ]
+    });
+  };
+
+  const updatePublication = (id: string, field: string, value: string) => {
+    onChange({
+      ...data,
+      publications: data.publications.map(pub => pub.id === id ? { ...pub, [field]: value } : pub)
+    });
+  };
+
+  const removePublication = (id: string) => {
+    onChange({
+      ...data,
+      publications: data.publications.filter(pub => pub.id !== id)
+    });
+  };
+
+  const addCustomSection = () => {
+    onChange({
+      ...data,
+      customSections: [
+        ...(data.customSections || []),
+        { id: Math.random().toString(), title: 'Nuova Sezione', items: [] }
+      ]
+    });
+  };
+
+  const updateCustomSectionTitle = (sectionId: string, title: string) => {
+    onChange({
+      ...data,
+      customSections: data.customSections.map(sec => sec.id === sectionId ? { ...sec, title } : sec)
+    });
+  };
+
+  const removeCustomSection = (sectionId: string) => {
+    onChange({
+      ...data,
+      customSections: data.customSections.filter(sec => sec.id !== sectionId)
+    });
+  };
+
+  const addCustomSectionItem = (sectionId: string) => {
+    onChange({
+      ...data,
+      customSections: data.customSections.map(sec => {
+        if (sec.id === sectionId) {
+          return {
+            ...sec,
+            items: [...sec.items, { id: Math.random().toString(), title: '', subtitle: '', date: '', description: '' }]
+          };
+        }
+        return sec;
+      })
+    });
+  };
+
+  const updateCustomSectionItem = (sectionId: string, itemId: string, field: string, value: string) => {
+    onChange({
+      ...data,
+      customSections: data.customSections.map(sec => {
+        if (sec.id === sectionId) {
+          return {
+            ...sec,
+            items: sec.items.map(item => item.id === itemId ? { ...item, [field]: value } : item)
+          };
+        }
+        return sec;
+      })
+    });
+  };
+
+  const removeCustomSectionItem = (sectionId: string, itemId: string) => {
+    onChange({
+      ...data,
+      customSections: data.customSections.map(sec => {
+        if (sec.id === sectionId) {
+          return {
+            ...sec,
+            items: sec.items.filter(item => item.id !== itemId)
+          };
+        }
+        return sec;
+      })
     });
   };
 
@@ -338,6 +438,130 @@ export const CVEditor: React.FC<CVEditorProps> = ({ data, onChange }) => {
           ))}
         </div>
       </section>
+
+      {/* Publications */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-[11px] font-bold uppercase tracking-tight text-primary">📚 Pubblicazioni</h3>
+          <Button onClick={addPublication} size="sm" variant="ghost" className="h-6 px-2 text-[10px]"><Plus size={12} /></Button>
+        </div>
+        <div className="space-y-3">
+          {data.publications?.map((pub) => (
+            <div key={pub.id} className="p-3 bg-muted/20 border border-border rounded-lg space-y-2 relative group">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="absolute top-2 right-2 h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => removePublication(pub.id)}
+              >
+                <Trash2 size={10} className="text-destructive" />
+              </Button>
+              <Input 
+                className="h-7 text-[11px] bg-white font-bold" 
+                value={pub.title} 
+                onChange={e => updatePublication(pub.id, 'title', e.target.value)} 
+                placeholder="Titolo Pubblicazione"
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <Input 
+                  className="h-7 text-[11px] bg-white" 
+                  value={pub.publisher} 
+                  onChange={e => updatePublication(pub.id, 'publisher', e.target.value)} 
+                  placeholder="Sede editoriale / Rivista"
+                />
+                <Input 
+                  className="h-7 text-[11px] bg-white" 
+                  value={pub.date} 
+                  onChange={e => updatePublication(pub.id, 'date', e.target.value)} 
+                  placeholder="Data (es. 2024)"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Input 
+                  className="h-7 text-[11px] bg-white" 
+                  value={pub.isbn} 
+                  onChange={e => updatePublication(pub.id, 'isbn', e.target.value)} 
+                  placeholder="ISBN / DOI / ISSN"
+                />
+                <Input 
+                  className="h-7 text-[11px] bg-white" 
+                  value={pub.url} 
+                  onChange={e => updatePublication(pub.id, 'url', e.target.value)} 
+                  placeholder="URL (opzionale)"
+                />
+              </div>
+              <Textarea 
+                className="text-[10px] h-12 bg-white" 
+                value={pub.description} 
+                onChange={e => updatePublication(pub.id, 'description', e.target.value)} 
+                placeholder="Autori o breve descrizione..."
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Custom Sections */}
+      {data.customSections?.map((section) => (
+        <section key={section.id} className="space-y-4 pt-4 border-t border-border mt-4">
+          <div className="flex items-center justify-between">
+            <Input 
+              className="text-[11px] font-bold uppercase tracking-tight text-primary h-7 px-1 bg-transparent border-transparent hover:border-input focus:border-input w-2/3"
+              value={section.title}
+              onChange={e => updateCustomSectionTitle(section.id, e.target.value)}
+            />
+            <div className="flex items-center gap-1">
+              <Button onClick={() => addCustomSectionItem(section.id)} size="icon" variant="ghost" className="h-6 w-6"><Plus size={12} /></Button>
+              <Button onClick={() => removeCustomSection(section.id)} size="icon" variant="ghost" className="h-6 w-6 text-destructive hover:text-destructive"><Trash2 size={12} /></Button>
+            </div>
+          </div>
+          <div className="space-y-3">
+            {section.items.map((item) => (
+              <div key={item.id} className="p-3 bg-muted/20 border border-border rounded-lg space-y-2 relative group">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute top-2 right-2 h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => removeCustomSectionItem(section.id, item.id)}
+                >
+                  <Trash2 size={10} className="text-destructive" />
+                </Button>
+                <Input 
+                  className="h-7 text-[11px] bg-white" 
+                  value={item.title} 
+                  onChange={e => updateCustomSectionItem(section.id, item.id, 'title', e.target.value)} 
+                  placeholder="Titolo elemento"
+                />
+                <Input 
+                  className="h-7 text-[11px] bg-white" 
+                  value={item.subtitle} 
+                  onChange={e => updateCustomSectionItem(section.id, item.id, 'subtitle', e.target.value)} 
+                  placeholder="Sottotitolo / Ruolo (opzionale)"
+                />
+                <Input 
+                  className="h-7 text-[11px] bg-white w-1/2" 
+                  value={item.date} 
+                  onChange={e => updateCustomSectionItem(section.id, item.id, 'date', e.target.value)} 
+                  placeholder="Data o Anno (opzionale)"
+                />
+                <Textarea 
+                  className="text-[10px] h-12 bg-white" 
+                  value={item.description} 
+                  onChange={e => updateCustomSectionItem(section.id, item.id, 'description', e.target.value)} 
+                  placeholder="Descrizione (opzionale)..."
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      {/* Button to add new custom section */}
+      <div className="pt-2">
+        <Button onClick={addCustomSection} variant="outline" size="sm" className="w-full text-xs font-medium border-dashed border-primary/30 text-primary hover:bg-primary/5">
+          <Plus size={14} className="mr-2" /> Aggiungi Nuova Sezione Custom
+        </Button>
+      </div>
 
       {/* Skills */}
       <section className="space-y-4">
