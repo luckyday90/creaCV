@@ -191,7 +191,7 @@ export default function App() {
             type="file" 
             ref={fileInputRef} 
             onChange={onFileChange} 
-            accept=".pdf,.docx,.txt" 
+            accept=".pdf,.docx,.txt,image/*" 
             className="hidden" 
           />
           <Button 
@@ -202,7 +202,7 @@ export default function App() {
             className="bg-primary/5 border-primary/20 hover:bg-primary/10"
           >
              {isExporting ? <Loader2 className="mr-2 animate-spin" size={14} /> : <FileUp className="mr-2" size={14} />}
-             {isExporting ? 'Elaborazione...' : 'Importa CV'}
+             {isExporting ? 'Analisi AI...' : 'Importa CV'}
           </Button>
           <Button variant="outline" size="sm" onClick={translateToEN} disabled={isExporting}>
              Traduci (EN)
