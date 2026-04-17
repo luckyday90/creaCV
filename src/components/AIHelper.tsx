@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { CVAIProvider } from '../lib/cvAi';
-import { Button } from './ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Sparkles, Languages, CheckCircle2, Search, Wand2, Loader2, Quote } from 'lucide-react';
-import { Badge } from './ui/badge';
+import { Badge } from '@/components/ui/badge';
 
 interface AIHelperProps {
   cvText: string;
