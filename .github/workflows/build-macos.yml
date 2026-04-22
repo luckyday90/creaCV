@@ -1,0 +1,40 @@
+name: Build macOS App
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm  install
+
+      - name: Build React App
+        run: npm run build
+        env:
+          VITE_APP_VERSION: ${{ github.ref_name }}
+
+      - name: Build/Release Electron App
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          max_attempts: 3
+        env:
+          # Se desideri firmare l'app per evitare l'avviso "sviluppatore non identificato"
+          # dovresti aggiungere i tuoi certificati Apple qui, ma per ora la facciamo libera
+          CSC_LINK: "" 
+          CSC_KEY_PASSWORD: ""
