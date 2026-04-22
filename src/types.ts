@@ -78,4 +78,4 @@ export interface CVData {
   interests: string[];
 }
 
-export type TemplateId = 'modern' | 'classic' | 'minimalist' | 'creative' | 'zenone';
+export type TemplateId = 'modern' | 'classic' | 'minimalist' | 'creative' | 'zenone' | 'technical';

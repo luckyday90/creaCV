@@ -583,3 +583,99 @@ export const ZenoneTemplate: React.FC<TemplateProps> = ({ data, bottomImage }) =
     </div>
   );
 };
+
+export const TechnicalTemplate: React.FC<TemplateProps> = ({ data, bottomImage }) => {
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(window.location.href)}`;
+
+  return (
+    <div id="cv-preview" className="bg-white text-black p-12 min-h-[1120px] font-sans w-[800px] border border-gray-200 shadow-sm relative">
+      <header className="text-center mb-10">
+        <h1 className="text-[28px] font-bold text-[#005a8d] uppercase tracking-[0.15em] mb-6">RIEPILOGO CURRICULUM</h1>
+        <div className="flex justify-center mb-6">
+          <img src={qrUrl} alt="QR Code" className="w-24 h-24 border border-gray-300 p-1" referrerPolicy="no-referrer" />
+        </div>
+        <div className="text-[13px] font-medium leading-tight">
+          Curriculum (Codice <span className="font-bold">3K3E2H15TP</span>)
+        </div>
+        <div className="text-[11px] text-gray-500 mt-2">Riepilogo dei dati inseriti:</div>
+      </header>
+
+      <div className="space-y-6">
+        <section>
+          <h2 className="text-[12px] font-bold text-[#005a8d] uppercase border-b border-gray-200 pb-1 mb-3">TRATTAMENTO DEI DATI PERSONALI</h2>
+          <div className="space-y-1.5 text-[10px] leading-tight text-gray-800">
+            <div className="flex gap-2">
+              <span className="font-bold shrink-0">☑</span>
+              <span>Confermo di aver letto e ben compreso l’informativa sul trattamento dati</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="font-bold shrink-0">☑</span>
+              <span>Rilascio dichiarazione sostitutiva di certificazione e/o atto di notorietà ai sensi degli artt. 46 e 47 del D.P.R. n° 445 del 28/12/2000 e s.m.i. - Testo Unico delle disposizioni amministrative e regolamentari in materia di documentazione amministrativa</span>
+            </div>
+            <div className="flex gap-2">
+              <span className="font-bold shrink-0">☑</span>
+              <span>Dichiaro di essere consapevole che, in caso di dichiarazioni non veritiere, verranno applicate le sanzioni penali previste e la decadenza dal beneficio ottenuto sotto la mia personale responsabilità (artt. 75 e 76 D.P.R n° 445 del 28/12/2000 e s.m.i.)</span>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-[12px] font-bold text-[#005a8d] uppercase border-b border-gray-200 pb-1 mb-3">ANAGRAFICA</h2>
+          <div className="grid grid-cols-1 gap-y-0.5 text-[11px] leading-snug">
+            <div className="flex"><span className="w-44 shrink-0 text-gray-600">Cognome:</span> <span className="font-bold uppercase">{data.personalInfo.fullName.split(' ').slice(-1)[0] || 'COGNOME'}</span></div>
+            <div className="flex"><span className="w-44 shrink-0 text-gray-600">Nome:</span> <span className="font-bold uppercase">{data.personalInfo.fullName.split(' ').slice(0, -1).join(' ') || 'NOME'}</span></div>
+            <div className="flex"><span className="w-44 shrink-0 text-gray-600">Sesso:</span> <span className="font-bold">Uomo</span></div>
+            <div className="flex"><span className="w-44 shrink-0 text-gray-600">Nato/a il:</span> <span className="font-bold text-[#005a8d]">09/11/1975</span></div>
+            <div className="flex"><span className="w-44 shrink-0 text-gray-600">Email:</span> <span className="font-bold lowercase">{data.personalInfo.email}</span></div>
+            <div className="flex"><span className="w-44 shrink-0 text-gray-600">Cellulare:</span> <span className="font-bold">{data.personalInfo.phone}</span></div>
+            <div className="flex"><span className="w-44 shrink-0 text-gray-600">Indirizzo di residenza:</span> <span className="font-bold uppercase">{data.personalInfo.location || 'Indirizzo non specificato'}</span></div>
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-[12px] font-bold text-[#005a8d] uppercase border-b border-gray-200 pb-1 mb-3">ESPERIENZE LAVORATIVE</h2>
+          <div className="space-y-5">
+            {data.experiences.map((exp) => (
+              <div key={exp.id} className="text-[11px] space-y-0.5">
+                <div className="flex"><span className="w-48 shrink-0 text-gray-500">Esperienza iniziata il:</span> <span className="font-bold text-[#005a8d]">{exp.startDate}</span></div>
+                <div className="flex"><span className="w-48 shrink-0 text-gray-500">Esperienza terminata il:</span> <span className="font-bold text-[#005a8d]">{exp.endDate}</span></div>
+                <div className="flex"><span className="w-48 shrink-0 text-gray-500">Ente o Azienda privata:</span> <span className="font-bold uppercase">{exp.company}</span></div>
+                <div className="flex"><span className="w-48 shrink-0 text-gray-500">Qualifica:</span> <span className="font-bold uppercase">{exp.position}</span></div>
+                {exp.description && (
+                  <div className="mt-1 text-[10px] text-gray-700 leading-tight">
+                    <span className="text-gray-400 italic">Descrizione attività:</span> {exp.description}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2 className="text-[12px] font-bold text-[#005a8d] uppercase border-b border-gray-200 pb-1 mb-3">TITOLI DI STUDIO E ATTESTAZIONI</h2>
+          <div className="space-y-4">
+            {data.educations.map((edu) => (
+              <div key={edu.id} className="text-[11px] space-y-0.5">
+                <div className="flex"><span className="w-48 shrink-0 text-gray-500">Denominazione:</span> <span className="font-bold uppercase">{edu.degree}</span></div>
+                <div className="flex"><span className="w-48 shrink-0 text-gray-500">Rilasciato da:</span> <span className="font-bold uppercase">{edu.school}</span></div>
+                <div className="flex"><span className="w-48 shrink-0 text-gray-500">Conseguito in data:</span> <span className="font-bold text-[#005a8d]">{edu.endDate}</span></div>
+                {edu.description && <div className="mt-1 text-[10px] text-gray-600 leading-tight italic">{edu.description}</div>}
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <div className="absolute bottom-10 left-12 right-12 flex justify-between items-end">
+        <div className="text-[10px] text-gray-400 font-mono">
+          Pagina 1 di 1
+        </div>
+        <div>
+          {bottomImage && (
+            <img src={bottomImage.url} alt="Immagine di fondo" className="h-16 object-contain mix-blend-multiply" referrerPolicy="no-referrer" />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};

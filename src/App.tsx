@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { CVData, TemplateId, DocumentFile, BottomImage } from './types';
 import { CVEditor } from './components/CVEditor';
-import { ModernTemplate, ClassicTemplate, MinimalistTemplate, ZenoneTemplate } from './components/CVTemplates';
+import { ModernTemplate, ClassicTemplate, MinimalistTemplate, ZenoneTemplate, TechnicalTemplate } from './components/CVTemplates';
 import { AIHelper } from './components/AIHelper';
 import { Button } from '@/components/ui-lib/button';
 import { 
@@ -365,6 +365,7 @@ export default function App() {
       case 'classic': return <ClassicTemplate {...props} />;
       case 'minimalist': return <MinimalistTemplate {...props} />;
       case 'zenone': return <ZenoneTemplate {...props} />;
+      case 'technical': return <TechnicalTemplate {...props} />;
       default: return <ModernTemplate {...props} />;
     }
   };
@@ -623,19 +624,19 @@ export default function App() {
             <Card className="flex flex-col shrink-0">
               <div className="p-4 flex flex-col">
                 <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Template Professionali</div>
-                <div className="grid grid-cols-4 gap-2">
-                  {(['modern', 'classic', 'minimalist', 'zenone'] as TemplateId[]).map((t) => (
+                <div className="grid grid-cols-5 gap-2">
+                  {(['modern', 'classic', 'minimalist', 'zenone', 'technical'] as TemplateId[]).map((t) => (
                     <button 
                       key={t}
                       onClick={() => setTemplate(t)}
-                      title={t === 'zenone' ? 'Stile allegato: Design Zenone.it' : undefined}
+                      title={t === 'zenone' ? 'Stile allegato: Design Zenone.it' : t === 'technical' ? 'Stile Burocratico PA con QR Code' : undefined}
                       className={`aspect-[1/1.2] bg-muted rounded-md border-2 transition-all hover:scale-105 ${template === t ? 'border-primary ring-2 ring-primary/20' : 'border-transparent'}`}
                     >
-                      <div className="w-full h-full flex flex-col items-center justify-center text-[8px] font-bold uppercase text-muted-foreground">
+                      <div className="w-full h-full flex flex-col items-center justify-center text-[8px] font-bold uppercase text-muted-foreground p-1">
                         <span className="text-[16px] mb-1">
-                          {t==='modern' ? '✨' : t==='classic' ? '🏛️' : t==='minimalist' ? '⚪' : '🟢'}
+                          {t==='modern' ? '✨' : t==='classic' ? '🏛️' : t==='minimalist' ? '⚪' : t==='zenone' ? '🟢' : '📄'}
                         </span>
-                        {t}
+                        <div className="text-center leading-tight truncate w-full">{t}</div>
                       </div>
                     </button>
                   ))}
